@@ -1,0 +1,126 @@
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Book Store</title>
+  <link href="https://s3.amazonaws.com/codecademy-content/projects/bootstrap.min.css" rel="stylesheet" />
+  <link href='https://fonts.googleapis.com/css?family=Roboto:500,300,700,400' rel='stylesheet' type='text/css'/>
+  <link rel="shortcut icon" href="book-store.ico"/>
+  <link rel="stylesheet" href="main.css"/>
+  <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css"/>
+</head>
+<!-- Titulo e logo do site -->
+<body ng-app="BlankApp" ng-cloak>
+  <div class="header">
+    <div class="container">
+        <img src="book-store.ico"/><h1>Book Store</h1>
+    </div>
+  </div>
+<!-- Corpo do site -->
+  <div class="main" ng-controller="mainControl">
+    <!-- Parte fixa do site -->
+    <div class="container">
+      <h2>Buscar: <input type="search" ng-model="q"  aria-label="filter books" />
+      <section layout="row" layout-sm="column" layout-align="end start" layout-wrap>
+        <md-button class="md-raised" ng-click="showcar()">
+          <font ng-if="mycar">Meu Carrinho <span class="glyphicon glyphicon-shopping-cart"></font>
+          <font ng-if="!mycar">Loja <span class="glyphicon glyphicon-book"></font>
+        </md-button>
+      </section></h2>
+
+      <!-- Parte com os Livros -->
+        <div ng-show="mycar">
+          <h4></h4>
+
+          <div ng-repeat="book in books | filter:q as results" class="col-md-4">
+            <div class="thumbnail">
+              <img ng-src="{{ book.cover }}" >
+              <p class="title">{{ book.nome }}</p>
+              <p class="autor">{{ book.autor }}</p>
+              <md-input-container class="md-block">
+                <label>Selecione a quantidade:</label>
+                <input required type="number" step="any" name="rate" ng-model="book.qtde" min="1"
+                     max="{{book.qtdeEst}}" />
+                <p class="title2">Quantidade em Estoque: {{book.qtdeEst}}</p>
+              </md-input-container>
+              <md-button class="md-primary md-raised" ng-click="addItem(book)" ng-if="book.qtde">
+                  + <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true">
+              </md-button>
+              <p class="price">R{{ book.preco | currency }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+<!-- Parte do Carrinho, com desconto -->
+<div class="container" ng-hide="mycar">
+  <div ng-if="TrabalheNaTegra">
+    <h3>Total</h3>
+    <h3>R{{totalDesc | currency}}</h3>
+
+    <md-chips ng-model="itens" md-enable-chip-edit="false">
+      <md-chip-template>
+        <span>
+          <strong>{{$chip.nome}}, </strong>
+          R{{$chip.precDesc | currency}}<br/>
+        </span>
+      </md-chip-template>
+
+      <button md-chip-remove ng-click="removeItem($chip)">
+         x
+      </button>
+    </md-chips>
+  </div>
+
+<!-- Parte do Carrinho, sem desconto -->
+  <div ng-if="!TrabalheNaTegra">
+    <h3>Total</h3>
+    <h3>R{{total | currency}}</h3>
+
+    <md-chips ng-model="itens" md-enable-chip-edit="false">
+      <md-chip-template>
+        <span>
+          <strong>{{$chip.nome}}, </strong>
+          R{{$chip.preco | currency}}<br/>
+        </span>
+      </md-chip-template>
+      <button md-chip-remove ng-click="removeItem($chip)">
+        x
+      </button>
+    </md-chips>
+  </div>
+  <md-checkbox ng-model="TrabalheNaTegra" aria-label="Checkbox 1" ng-click="AplicDesc()">
+      Utilizar cupom de descontro TrabalheNaTegra
+  </md-checkbox>
+  </div>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>-
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
+  <!-- Your application bootstrap  -->
+  <script type="text/javascript">
+    /**
+     * You must include the dependency on 'ngMaterial'
+     */
+    angular.module('BlankApp', ['ngMaterial']);
+  </script>
+  <script src="controller.js">
+
+  </script>
+
+  </div>
+
+</body>
+</html>
+
+<!--
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+-->
